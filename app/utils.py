@@ -26,7 +26,7 @@ def load_style_image(image_url, image_size=(256, 256), preserve_aspect_ratio=Tru
   return img
 
 @functools.lru_cache(maxsize=None)
-def load_content_image(image, image_size=(256, 256), preserve_aspect_ratio=True):
+def load_content_image(image, image_size=(300, 300), preserve_aspect_ratio=True):
   img = np.array(Image.open(image),dtype=np.float32)/255.0
   img = np.expand_dims(img,0)
   img = tf.convert_to_tensor(img)

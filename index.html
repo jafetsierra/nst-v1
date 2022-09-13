@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form id="form">
+            <input type="text" name="style" id="style">
+            <input type="file" name="file" id="file" accept="image/*">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <br>
+    <p>***********</p>
+    <div id="output">
+
+    </div>
+    <script>
+        const myForm  = document.getElementById('form');
+        const inpFile = document.getElementById('file');
+        let output    = document.getElementById('output');
+        myForm.addEventListener("submit",event => {
+            event.preventDefault();
+
+            const files = inpFile.files;
+            const formData = new FormData();
+            const style = document.getElementById('style').value;
+            console.log(style);
+            formData.append('file', files[0]);
+            let params = {
+                "style_name": style
+            }
+            let query = Object.keys(params)
+                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                .join('&');
+            let url = 'http://127.0.0.1:8000/?' + query
+            var requestOptions = {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            };
+
+            console.log(url);
+            fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(() => {
+                output.style.backgroundImage = "url('./app/results/test1.jpg')";
+                output.style.backgroundSize = "cover";
+                console.log("result printed");
+            })
+            .catch(error => console.log('error', error));
+        })
+    </script>
+    <style>
+        #output{
+            display: flex;
+            background-color: aqua;
+            padding: 10px;
+            /*height: 300px;*/
+        }
+    </style>
+</body>
+</html>
+

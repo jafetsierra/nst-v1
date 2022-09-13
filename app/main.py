@@ -51,5 +51,5 @@ def file_process(file: UploadFile, style_name:str):
     result = generate(file.file,style_img_path(style_name))[0].numpy()
     plt.imshow(result,aspect='equal')
     plt.show()
-    plt.imsave("test1.jpg",result)
+    plt.imsave("./results/test1.jpg",result)
     return Response(json.dumps(result.tolist()))
