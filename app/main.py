@@ -7,8 +7,17 @@ import matplotlib.pyplot as plt
 from fastapi import Response
 import json
 from PIL import Image
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def style_img_path(style):
     images = os.listdir('./img')
@@ -25,7 +34,7 @@ def generate(file,style):
     content_image = load_content_image(file, content_img_size)
     print("loading style image")
     style_image = load_style_image(style, style_img_size)
-    style_image = tf.nn.avg_pool2d(style_image, ksize=[3,3], strides=[1,1], padding='VALID')
+    style_image = tf.nn.avg_pool(style_image, ksize=[4,4], strides=[2,2], padding='SAME')
     print("images shape: ",content_image.shape, style_image.shape)
     #show_n([content_image, style_image], ['Content image', 'Style image'])
     with tf.device('/cpu:0'):
